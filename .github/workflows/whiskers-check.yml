@@ -1,0 +1,43 @@
+name: Lint Whiskers Repository
+
+on:
+  workflow_call:
+    inputs:
+      args:
+        required: true
+        description: CLI arguments to pass to whiskers, "--check" will be appended at the end of each line. Arguments on a new line will be passed to separate invocations of whiskers.
+        type: string
+      whiskers-version:
+        required: false
+        description: The version of whiskers to use. If not provided, the version will be automatically detected from the tera template(s) in the repository.
+        type: string
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Whiskers
+        if: ${{ inputs.whiskers-version }}
+        uses: catppuccin/setup-whiskers@v2
+        with:
+          whiskers-version: ${{ inputs.whiskers-version }}
+
+      - name: Setup Whiskers (Auto Detecting Version)
+        if: ${{ !inputs.whiskers-version }}
+        uses: catppuccin/setup-whiskers@v2
+
+      - name: Check Templates
+        env:
+          all_args: ${{ inputs.args }}
+        run: |
+          while IFS=$'\n' read -r args; do
+            # Skip possible empty last line
+            [ -z "${args}" ] && continue
+
+            echo "::group::$args"
+            eval "whiskers $args --check"
+            echo "::endgroup::"
+          done <<< "$all_args"

@@ -1,0 +1,38 @@
+name: catppuccin/vscode-icons
+
+on:
+  workflow_call:
+    inputs:
+      path:
+        required: true
+        description: "The path to the catppuccin/vscode-icons submodule."
+        type: string
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: "recursive"
+          fetch-depth: 0
+
+      - name: Update Submodule
+        id: submodules
+        uses: sgoudham/update-git-submodules@v2
+        with:
+          submodules: ${{ inputs.path }}
+          strategy: "tag"
+
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v7
+        if: ${{ steps.submodules.outputs[format('{0}--updated', github.event.inputs.path)] }}
+        with:
+          commit-message: "feat: update catppuccin/vscode-icons to ${{ steps.submodules.outputs[format('{0}--latestTag', github.event.inputs.path)] }}"
+          branch: "feat/update-vscode-icons-${{ steps.submodules.outputs[format('{0}--latestTag', github.event.inputs.path)] }}"
+          title: "feat: update catppuccin/vscode-icons submodule to ${{ steps.submodules.outputs[format('{0}--latestTag', github.event.inputs.path)] }}"
+          body: ${{ steps.submodules.outputs.prBody }}
