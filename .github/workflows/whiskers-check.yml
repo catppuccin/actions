@@ -11,6 +11,11 @@ on:
         required: false
         description: The version of whiskers to use. If not provided, the version will be automatically detected from the tera template(s) in the repository.
         type: string
+      working-directory:
+        required: false
+        description: The working directory to call whiskers from.
+        default: "."
+        type: string
 
 jobs:
   check:
@@ -30,6 +35,7 @@ jobs:
         uses: catppuccin/setup-whiskers@v2
 
       - name: Check Templates
+        working-directory: ${{ inputs.working-directory }}
         env:
           all_args: ${{ inputs.args }}
         run: |
