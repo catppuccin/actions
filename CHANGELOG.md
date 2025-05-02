@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/catppuccin/actions/compare/v1.0.0...v1.1.0) (2025-05-02)
+
+
+### Features
+
+* **whiskers-check:** allow working directory to be specified ([#5](https://github.com/catppuccin/actions/issues/5)) ([43becf6](https://github.com/catppuccin/actions/commit/43becf66676963b9d8444cb6952e56d3030b34a3))
+
 ## 1.0.0 (2025-04-21)
 
 
