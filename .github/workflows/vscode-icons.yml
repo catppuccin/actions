@@ -30,9 +30,9 @@ jobs:
 
       - name: Create PR
         uses: peter-evans/create-pull-request@v7
-        if: ${{ steps.submodules.outputs[format('{0}--updated', github.event.inputs.path)] }}
+        if: ${{ steps.submodules.outputs[format('{0}--updated', inputs.path)] }}
         with:
-          commit-message: "feat: update catppuccin/vscode-icons to ${{ steps.submodules.outputs[format('{0}--latestTag', github.event.inputs.path)] }}"
-          branch: "feat/update-vscode-icons-${{ steps.submodules.outputs[format('{0}--latestTag', github.event.inputs.path)] }}"
-          title: "feat: update catppuccin/vscode-icons submodule to ${{ steps.submodules.outputs[format('{0}--latestTag', github.event.inputs.path)] }}"
+          commit-message: "feat: update catppuccin/vscode-icons to ${{ steps.submodules.outputs[format('{0}--latestTag', inputs.path)] }}"
+          branch: "feat/update-vscode-icons-${{ steps.submodules.outputs[format('{0}--latestTag', inputs.path)] }}"
+          title: "feat: update catppuccin/vscode-icons submodule to ${{ steps.submodules.outputs[format('{0}--latestTag', inputs.path)] }}"
           body: ${{ steps.submodules.outputs.prBody }}
